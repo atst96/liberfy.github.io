@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<title>Liberfy for Windows</title>
+	<link rel="stylesheet" href="./style.css">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<script><!--
+
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', './updates/list.json', true);
+	xhr.send(null);
+	xhr.onload = function(e) {
+		if(xhr.readyState == 4
+			&& xhr.status == 200) {
+			var json = JSON.parse(xhr.responseText).filter(
+				function(e, i, a) {
+					return e.platform == 'windows';
+				});
+
+			if(json.length == 0) return;
+
+			var data = json[0];
+			document.getElementById('latest-update-title').innerHTML = "Liberfy for Windows ver" + data.version;
+			document.getElementById('latest-update-link').setAttribute('href', './updates/' + data.path)
+			document.getElementById('lastest-update-description').innerHTML = data.description.replace(/\n/g, '<br>');
+
+			var updates = document.getElementById('updates');
+
+			if(json.length > 1)
+				for(var i=1;i<json.length;i++) {
+				var data = json[i];
+
+				var title = document.createElement('h3');
+				title.innerHTML = 'ver ' + data.version;
+				title.setAttribute('data-ver', data.version.replace(/\./g, '-'));
+				title.onclick = function(e) {
+					var element = document.getElementById('update-' + this.getAttribute('data-ver'));
+					var style = element.style;
+					if(style.display == 'none'
+						|| style.display == '')
+						style.display = 'block';
+					else
+						style.display = 'none';
+				};
+
+				var baseDiv = document.createElement('div');
+				baseDiv.setAttribute('id', 'update-' + data.version.replace(/\./g, '-'));
+
+				var link = document.createElement('a');
+				link.innerHTML = "Download";
+				link.setAttribute('href', './updates/' + data.path);
+				link.setAttribute('class', 'dl_btn');
+				baseDiv.appendChild(link);
+
+				var desc = document.createElement('p');
+				desc.innerHTML = data.description.replace(/\n/g, '<br>');
+				baseDiv.appendChild(desc);
+
+				updates.appendChild(title);
+				updates.appendChild(baseDiv)
+			}
+		}
+	};
+
+	--></script>
+</head>
+<body>
+	<div id="header">
+		<div class="wrapper">
+			<div id="header-title">
+				<span>Liberfy for Windows</span>
+			</div>
+
+			<div id="menu-navigator">
+				<ul>
+					<li><a href="./">トップ</a></li>
+					<li><a class="active" href="./download.html">ダウンロード</a></li>
+					<li><a href="./library.html">ライブラリ</a></li>
+					<li><a href="./info.html">機能</a></li>
+					<li><a href="./help.html">ヘルプ</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div id="content">
+		<div class="wrapper">
+			<div class="article">
+				<h2 class="article-title">ダウンロード</h2>
+				<div class="article-content">
+					<div id="latest-update" style="display:table;width:100%">
+						<div>
+							<div class="update-info">
+								<h3 id="latest-update-title">Liberfy for Windows</h3>
+								<a id="latest-update-link" class="dl_btn" href="#"><span class="fa fa-download"></span> Download</a>
+							</div>
+							更新内容:
+							<p id="lastest-update-description" class="update-descript"></p>
+						</div>
+						<div id="update-icon">
+							<img width="48" height="48" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="article">
+				<h2 class="article-title">必須環境</h2>
+				<ul>
+					<li>Microsoft Windows Vista / 7 / 8 / 8.1</li>
+					<li><a href="https://www.microsoft.com/ja-jp/download/details.aspx?id=30653">.NET Framework 4.5</a></li>
+				</ul>
+			</div>
+
+			<div class="article">
+				<h2 class="article-title">過去のバージョン</h2>
+				<div id="updates"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
